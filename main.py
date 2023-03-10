@@ -16,7 +16,6 @@ while(1):
     cost = frt.simulate( clients, solution )    
 
     if(cost < best):
-        frt.view_solution( clients, solution )
         best = cost
         print(cost)
 
