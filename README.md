@@ -58,15 +58,13 @@ use example:
 solution = frt.random_swap( solution )
 ```
 
-##### def random_swap(sequence):
+##### def view_solution(clients, sequence):
 ```
-# this function performs a random swap of 2 randomly chosen elements in the sequence order
-# returns:
-#     the new swapped sequence
+# graphically displays the solution route with matplotlib
 ```
 use example:
 ```
-solution = frt.random_swap( solution )
+frt.view_solution(clients, best_solution)
 ```
 
 
