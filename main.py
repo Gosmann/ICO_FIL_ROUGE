@@ -1,9 +1,10 @@
 import numpy as np
 import matplotlib as plt
 import fil_rouge_tools as frt
+import ga_tools as ga
 
 clients  = frt.get_clients()
-#clients = clients[0:10]
+clients = clients[0:100] # creates a smaller version of the database, for testing
 
 # specify a solution by creating a numpy array with the same number of elements
 #       as there are clients in the problem
@@ -14,6 +15,8 @@ best = frt.simulate( clients, solution )
 best_solution = np.copy(solution)
 
 iterations = 0  # iteractions counter
+
+ga.genetic_algorithm(clients, 100, clients.shape[0], 1000, 15)
 
 while(1):
 
