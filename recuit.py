@@ -3,18 +3,6 @@ import matplotlib as plt
 import fil_rouge_tools as frt
 from math import *
 
-clients  = frt.get_clients()
-clients = clients[0:10]
-
-# specify a solution by creating a numpy array with the same number of elements
-#       as there are clients in the problem
-solution = np.arange(clients.shape[0])
-np.random.shuffle(solution)
-
-best = frt.simulate( clients, solution )    
-best_solution = np.copy(solution)
-
-
 def recuit_simule(clients, best_solution, best):
 # Initialisation
     
@@ -27,6 +15,7 @@ def recuit_simule(clients, best_solution, best):
     T=T0
     nb_iterations=1000
     
+    best_fit_list = []
     while T>Tmin and i<nb_iterations:
         i += 1
         
@@ -56,7 +45,6 @@ def recuit_simule(clients, best_solution, best):
                 best = cost
                 #distance=distance_tot(solution_voisine)
         print(best)
-    frt.view_solution(clients, best_solution)
-    return best_solution
+        best_fit_list.append(best)
 
-recuit_simule(clients, best_solution, best)
+    return best_solution, best_fit_list
