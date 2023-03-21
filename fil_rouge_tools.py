@@ -86,3 +86,19 @@ def view_solution(clients, sequence):
     #plt.draw()  
     plt.pause(0.00000001)
     
+def improvement_curve(fit_list, title):
+    plt.plot(fit_list, '.-')
+    plt.xlabel('Improvement Number')
+    plt.ylabel('Evaluation f(x)')
+    plt.title(title)
+    plt.show()
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
