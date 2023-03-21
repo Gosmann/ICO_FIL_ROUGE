@@ -15,12 +15,15 @@ def genetic_algorithm(clients, pop_size, num_genes, num_generations, num_parents
     new_pop = new_pop.astype('int32')
     fitness = np.empty(pop_size)
     
+    best_fit_list = []
     for generation in range(num_generations):
         # first we calculate the fitness of each solution
         for i in range(pop_size):
             fitness[i] = frt.simulate(clients, new_pop[i])
         print('\033[1m'+"Gen ", generation, " :" + '\033[0m')
-        print("Best result: ", min(fitness))
+        best_fit = min(fitness)
+        print("Best result: ", best_fit)
+        best_fit_list.append(best_fit)
         
         # select the best parents in the population for mating
         parents = mating_pool(new_pop, fitness, num_parents_mating)
@@ -39,7 +42,7 @@ def genetic_algorithm(clients, pop_size, num_genes, num_generations, num_parents
         fitness[i] = frt.simulate(clients, new_pop[i])
     solution = new_pop[np.where(fitness == np.min(fitness))[0][0], :]
     
-    return solution
+    return solution, best_fit_list
     
 # This function chooses the best parents that will be used for generating the
 #   new population, based on the fitness of each individual and the number
