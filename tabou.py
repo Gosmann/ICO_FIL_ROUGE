@@ -102,20 +102,18 @@ def quicksort(arr, lo=0, hi=None):
 
     return arr
 
-def tabou(clients, véhicule):
+def tabou(clients, véhicule,tab):
     table_clients=[[i,clients[i][2]] for i in range (len(clients))]
     iencli=[client[:2] for client in clients]
     solution0 = init(clients,véhicule)
-    last=[[(0,0),(0,0)]]
     cost=abs(frt.simulate_slow(iencli, convert(solution0)))
-    lastCost=[cost]
-    best = [solution0,cost,last[0]]
-    solution1 = [solution0]
+    last=[[solution0,cost,[(0,0),(0,0)]]]
+    best = last[0]
+    least = last[0]
     tabouList=[]
-    long={0}
-    coutIni=cost
-    compteur=0
-    while len(tabouList)<40:
+    compt=0
+    bestCost=[cost]
+    while len(tabouList)<1000 and compt<tab:
         i = rd.randint(0,len(solution0)-1)
         j = rd.randint(1,len(solution0[i])-1)
         accessible = []
@@ -152,35 +150,48 @@ def tabou(clients, véhicule):
             else:
                 accessible.append([sol,abs(frt.simulate_slow(iencli,convert(sol))),[(i,j),(len(solution0)-1,1)]])
         quicksort(accessible)
+        if accessible!=[]:
+            if accessible[-1][1]>least[1]:
+                least=accessible[-1]
         if accessible==[]:
-            if len(solution1)>1:
-                lastCost.pop()
-                solution0 = solution1.pop()
-                tabouList.append(last.pop())
+            if len(last)>0:
+                elt=last.pop()
+                solution0 = elt[0]
+                tabouList.append(elt[2])
             else:
-                continue
+                #print("not OK",len(tabouList))
+                last.append(least)
+                tabouList=[]
         else:
             ind=0
             acc=len(accessible)     
             while ind<acc and (accessible[ind][2] in tabouList):
                 ind+=1
-            if ind<acc and accessible[ind][1]<lastCost[-1]:
+            if ind<acc and len(last)>0 and accessible[ind][1]<last[-1][1]:
                 if accessible[ind][1]<cost:
                     cost=accessible[ind][1]
                     best = accessible[ind]
-                lastCost.append(accessible[ind][1])
-                last.append(accessible[ind][2])
-                solution1.append(solution0)
+                last.append([solution0,accessible[ind][1],accessible[ind][2]])
                 solution0 = accessible[ind][0]
             else:
-                if len(solution1)>1:
-                    lastCost.pop()
-                    solution0 = solution1.pop()
-                    tabouList.append(last.pop())
+                if len(last)>0:
+                    elt=last.pop()
+                    solution0 = elt[0]
+                    tabouList.append(elt[2])
                 else:
-                    continue
-        long.add(len(tabouList))
-        compteur+=1
-        if compteur>1000:
-            print(solution0,solution1,tabouList,i,j,accessible)
-    return convert(best[0]),best[1]
+                    #print("not OK",len(tabouList))
+                    last.append(least)
+                    tabouList=[]
+        #if len(last)==1:
+            #print("OK",compt)
+        if compt%1000==0:
+            print(compt)
+        compt+=1
+        bestCost.append(cost)
+    x=len(bestCost)
+    X=[i for i in range(x)]
+    plt.loglog(X,bestCost)
+    plt.show()
+    return convert(best[0]),best[1],bestCost[0],compt,len(tabouList)
+
+print(tabou(clients,15,100000))
