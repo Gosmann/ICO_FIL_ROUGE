@@ -74,7 +74,7 @@ def random_swap(solution):
     return solution
     
 # graphic visualization with matplotlib    
-def view_solution(clients, sequence):
+def view_solution(clients, sequence, continous = 1, title="std_title"):
     current_order = clients[sequence[:]]   # holds the current clients coordinates
 
     latitudes = (current_order.T[0][:])
@@ -82,14 +82,22 @@ def view_solution(clients, sequence):
 
     plt.clf() 
     plt.plot( latitudes , longitudes , lw = 1.0, linestyle="-")
+    
+    plt.xlabel('latitude') 
+    plt.ylabel('longitude')
+    plt.title(title)
+
     #plt.scatter(latitudes, longitudes, s = 1.0)
     #plt.draw()  
+    plt.grid()
     plt.pause(0.00000001)
+    if(continous == 0):
+        plt.show()
     
 def improvement_curve(fit_list, title):
     plt.plot(fit_list, '.-')
-    plt.xlabel('Improvement Number')
-    plt.ylabel('Evaluation f(x)')
+    plt.xlabel('Iteration (times 10k)')
+    plt.ylabel('Cost function f(x)')
     plt.title(title)
     plt.show()
     
