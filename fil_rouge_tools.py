@@ -74,7 +74,7 @@ def random_swap(solution):
     return solution
     
 # graphic visualization with matplotlib    
-def view_solution(clients, sequence, continous = 1, title="std_title"):
+def view_solution(clients, sequence, continous = 1, title="std_title", save = 0):
     current_order = clients[sequence[:]]   # holds the current clients coordinates
 
     latitudes = (current_order.T[0][:])
@@ -91,8 +91,13 @@ def view_solution(clients, sequence, continous = 1, title="std_title"):
     #plt.draw()  
     plt.grid()
     plt.pause(0.00000001)
+
+    if(save == 1):
+        plt.savefig("./recuit_curves/"+title+".png")
+
     if(continous == 0):
         plt.show()
+    
     
 def improvement_curve(fit_list, title):
     plt.plot(fit_list, '.-')

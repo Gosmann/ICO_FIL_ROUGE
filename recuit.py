@@ -64,7 +64,7 @@ def recuit_simule(clients, best_solution, best):
         if( (i % multiple) == 0):
             print("I: [%3d]*10k , T : [%8.4f], best : [%5.2f], prob : [%5.2f]" % (i/multiple, T, best, probability) )
             fits.append(best)
-            frt.view_solution(clients, best_solution, title=("iteration num. [%.2E]" % i ) ) 
+            frt.view_solution(clients, best_solution, title=("iteration num. [%.2E]" % i ), save = 1 ) 
         
     return best_solution, fits
 
