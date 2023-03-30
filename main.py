@@ -1,14 +1,13 @@
-#
 import numpy as np
 import matplotlib as plt
 import fil_rouge_tools as frt
 
 import ga_tools as ga
-import recuit
+#import recuit
 
 
 clients  = frt.get_clients()
-#clients = clients[0:100] # creates a smaller version of the database, for testing
+clients = clients[0:100] # creates a smaller version of the database, for testing
 
 # specify a solution by creating a numpy array with the same number of elements
 #       as there are clients in the problem

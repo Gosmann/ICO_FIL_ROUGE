@@ -68,6 +68,7 @@ def crossover(parents, offspring_size, num_genes):
     crossover_p2 = np.random.randint(crossover_p1, 0.8*num_genes)#np.uint8(num_genes*2/3)
 
     offspring = np.empty((offspring_size, num_genes))
+    offspring.fill(-1)
     
     parent_idx = np.empty(2).astype('int32')
     # we will get a pair of random parents
@@ -79,8 +80,11 @@ def crossover(parents, offspring_size, num_genes):
         np.random.shuffle(parent_idx)
         # 1st part of genes comes from one parent, the middle from the other and the last from 1st parent
         offspring[k, 0: crossover_p1] = parents[parent_idx[0], 0: crossover_p1]
-        offspring[k, crossover_p1 : crossover_p2] = parents[parent_idx[1], crossover_p1 : crossover_p2]
-        offspring[k, crossover_p2 : ] = parents[parent_idx[0], crossover_p2 : ]
+        #offspring[k, crossover_p1 : crossover_p2] = parents[parent_idx[1], crossover_p1 : crossover_p2]
+        offspring[k, crossover_p2: ] = parents[parent_idx[0], crossover_p2: ]
+        
+        middle = np.setdiff1d(parents[parent_idx[1]], offspring[k], assume_unique = True)
+        offspring[k, crossover_p1 : crossover_p2] = middle
     
     return offspring
 
