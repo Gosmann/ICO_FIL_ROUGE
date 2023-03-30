@@ -13,21 +13,21 @@ clients = clients[0:100] # creates a smaller version of the database, for testin
 #       as there are clients in the problem
 solution = np.arange(clients.shape[0])
 np.random.shuffle(solution)
-
+print("c:", clients, "    s:", solution)
 best = frt.simulate( clients, solution )    
 best_solution = np.copy(solution)
 
 iterations = 0  # iteractions counter
 
 # genetic algorithm test
-ga_sol, ga_fit = ga.genetic_algorithm(clients, 100, clients.shape[0], 1000, 15)
+ga_sol, ga_fit = ga.genetic_algorithm(clients, solution, 1000, 2)
 print(ga_sol)
 frt.improvement_curve(ga_fit, "Genetic Algorithm")
 
 # recuit simulé test
-recuit_sol, recuit_fit = recuit.recuit_simule(clients, best_solution, best)
+'''recuit_sol, recuit_fit = recuit.recuit_simule(clients, best_solution, best)
 print(recuit_sol)
-frt.improvement_curve(recuit_fit, "Recuit Simulé")
+frt.improvement_curve(recuit_fit, "Recuit Simulé")'''
 
 # tabou test
 
@@ -49,8 +49,3 @@ while(1):
         
     iterations += 1
     
-    
-    
-
-
-

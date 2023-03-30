@@ -1,17 +1,22 @@
-# Genetic Algorithm tools v1
+# Genetic Algorithm tools v4
 import numpy as np
 import math
 import fil_rouge_tools as frt
 
-# This function uses a genetic algorithm to find the optimal solution 
-#   for the VRP (Vehicle Routing Problem) based on a random initial 
-#   solution (of arbitrary size) and on the number of generations
-def genetic_algorithm(clients, pop_size, num_genes, num_generations, num_parents_mating):
-    # define the random initial population
+def genetic_algorithm(clients, solution, num_generations, num_parents_mating):
+    '''This function uses a Genetic Algorithm to find the optimal solution 
+    for the VRP (Vehicle Routing Problem) based on the clients, a random initial 
+    solution (of arbitrary size), the number of generations and the number of parents
+    mating on each generation'''
+    # population size is defined as double of the number of possible clients
+    pop_size = clients.shape[0]*2
+    # the number of genes is the number of possible clients
+    num_genes = clients.shape[0]
+    
+    # define the random initial population based on the given "clients" and initial "soution" (2 random swap for each)
     new_pop = np.empty((pop_size, clients.shape[0]))
     for i in range(pop_size):
-        new_pop[i] = np.arange(clients.shape[0])
-        np.random.shuffle(new_pop[i])
+        new_pop[i] = frt.random_swap(solution)
     new_pop = new_pop.astype('int32')
     fitness = np.empty(pop_size)
     
@@ -71,13 +76,11 @@ def crossover(parents, offspring_size, num_genes):
     offspring.fill(-1)
     
     parent_idx = np.empty(2).astype('int32')
-    # we will get a pair of random parents
+    # we will get both parents randomly
     for k in range(offspring_size):
-        parent_idx[0] = k%parents.shape[0]
-        parent_idx[1] = (k+1*np.random.randint(2,parents.shape[0]))%parents.shape[0]
+        parent_idx = np.random.choice(parents.shape[0], 2, replace=False) # replace=false forces each number of the sample to be unique
         #print("parent1", parent_idx[0], "    parent2", parent_idx[1])
         
-        np.random.shuffle(parent_idx)
         # 1st part of genes comes from one parent, the middle from the other and the last from 1st parent
         offspring[k, 0: crossover_p1] = parents[parent_idx[0], 0: crossover_p1]
         #offspring[k, crossover_p1 : crossover_p2] = parents[parent_idx[1], crossover_p1 : crossover_p2]
