@@ -1,8 +1,10 @@
 import numpy as np
 import matplotlib as plt
 import fil_rouge_tools as frt
-
+from mesa import Model
+from mesa.time import BaseScheduler
 import ga_tools as ga
+import time
 #import recuit
 
 clients  = frt.get_clients()
@@ -19,9 +21,51 @@ best_solution = np.copy(solution)
 
 iterations = 0  # iteractions counter
 
+
+class Optimisation(Model):
+    
+    def __init__(self):
+        #attribution d'un chef d'orchestre
+        self.schedule=BaseScheduler(self)
+        self.agent_list = []
+        
+
+        self.ga_agent0 = ga.GA(clients, solution, 100, 2)
+        self.ga_agent1 = ga.GA(clients, solution, 100, 2)
+        self.ga_agent2 = ga.GA(clients, solution, 100, 2)
+        
+        self.schedule.add(self.ga_agent0)
+        self.schedule.add(self.ga_agent1)
+        self.schedule.add(self.ga_agent2)
+        
+        self.agent_list.append(self.ga_agent0)
+        self.agent_list.append(self.ga_agent1)
+        self.agent_list.append(self.ga_agent2)
+
+    #la fonction principale
+    def step(self):
+        self.schedule.step()
+        print (self.choose_best())
+        
+    def choose_best(self):
+        fit_list = [frt.simulate(clients, agent.solution) for agent in self.agent_list]
+        return min(fit_list)
+
+
+model = Optimisation()
+
+st = time.time()
+model.step()
+et = time.time()
+
+model.step()
+
+frt.improvement_curve(model.ga_agent0.best_fit_list, "Genetic Algorithm")
+time = et-st
+
 # genetic algorithm test
-#ga_sol, ga_fit = ga.genetic_algorithm(clients, solution, 1000, 2)
-#print(ga_sol)
+#ga_sol, ga_fit, nb = ga.genetic_algorithm(clients, solution, 100, 2)
+#print(ga_sol, nb)
 #frt.improvement_curve(ga_fit, "Genetic Algorithm")
 
 # recuit simulé test
@@ -30,6 +74,9 @@ iterations = 0  # iteractions counter
 #frt.improvement_curve(recuit_fit, "Recuit Simulé")
 
 # tabou test
+
+
+
 
 
 # random algorithm test

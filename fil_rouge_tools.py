@@ -1,5 +1,10 @@
 import pandas as pd
 import numpy as np
+import mesa
+from mesa import Agent
+from mesa import Model
+from mesa.time import BaseScheduler
+import ga_tools as ga
 #np.set_printoptions(edgeitems=10,linewidth=180)
 
 from matplotlib import pyplot as plt
@@ -231,9 +236,8 @@ def improvement_curve(fit_list, title):
     plt.title(title)
     plt.show()
     
-    
-    
-    
+
+        
     
     
     
