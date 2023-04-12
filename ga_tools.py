@@ -2,7 +2,7 @@
 import numpy as np
 import math
 import fil_rouge_tools as frt
-    
+
 def genetique_simule(clients, best_solution, num_generations, pop_size, num_parents_mating) :
     solution = np.copy(best_solution)
 
@@ -17,7 +17,9 @@ def genetique_simule(clients, best_solution, num_generations, pop_size, num_pare
     
     # define the random initial population based on the given "clients" and initial "soution" (2 random swap for each)
     new_pop = np.empty((pop_size, clients.shape[0]))
-    for i in range(pop_size):
+    # define the first solution as beeing the given solution
+    new_pop[0] = np.copy(solution)
+    for i in range(1, pop_size):
         new_pop[i] = frt.random_swap(solution)
     new_pop = new_pop.astype('int32')
     fitness = np.empty(pop_size)
@@ -119,4 +121,3 @@ def mutation(offspring_co):
             
             offspring_co[idx, random_id1], offspring_co[idx, random_id2] = offspring_co[idx, random_id2], offspring_co[idx, random_id1]
     return offspring_co
-

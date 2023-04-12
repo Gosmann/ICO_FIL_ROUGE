@@ -186,7 +186,7 @@ class Opti_test(Model):
 model = Opti_test()
 #model.step()
 
-steps=10
+steps=20
 
 print("first time in the sequence")
 best = frt.simulate(clients, solution)
