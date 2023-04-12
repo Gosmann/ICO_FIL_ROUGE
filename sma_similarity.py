@@ -3,7 +3,7 @@ import numpy as np
 def solution_similarity(solution1, solution2):
     '''This function calculates the difference between 2 given solutions
         using the quadratic difference between the positions of each client
-        and return the RMS'''
+        and return the RMS (closer to 0 means more similar)'''
     rms = 0.0
     for i1 in range(solution1.size) :
         # finds the position of the client in the second solution
