@@ -23,8 +23,8 @@ def recuit_simule(clients, best_solution, best):
     T=10 #Température 
     Tmin=0.1e-3 #Température minimale, pour laquelle l'état d'équilibre est atteint
     
-    a = 0.99999
-    nb_iterations=1e6 #Nombre maximal d'itérations
+    a = 0.999
+    nb_iterations=1e3 #Nombre maximal d'itérations
     fits = []
     # On utilise la température et un nombre d'itérations maximum comme conditions d'arrêt
     #while T>Tmin and i<nb_iterations:
@@ -59,19 +59,19 @@ def recuit_simule(clients, best_solution, best):
         
         #print(best)
         
-        multiple = 10000
+        multiple = 100
 
         if( (i % multiple) == 0):
-            print("I: [%3d]*10k , T : [%8.4f], best : [%5.2f], prob : [%5.2f]" % (i/multiple, T, best, probability) )
+            #print("I: [%3d]*10k , T : [%8.4f], best : [%5.2f], prob : [%5.2f]" % (i/multiple, T, best, probability) )
             fits.append(best)
-            frt.view_solution(clients, best_solution, title=("iteration num. [%.2E]" % i ), save = 1 ) 
+            frt.view_solution(clients, best_solution, title=("iteration num. [%.2E]" % i ), save = 0, continous = 1 ) 
         
     return best_solution, fits
 
-best, fits = recuit_simule(clients, best_solution, best)
+#best, fits = recuit_simule(clients, best_solution, best)
 
-print(fits)
-frt.view_solution(clients, best, continous=0)
-frt.improvement_curve(fits, "Cost over number of iterations")
+#print(fits)
+#frt.view_solution(clients, best, continous=0)
+#frt.improvement_curve(fits, "Cost over number of iterations")
 
 

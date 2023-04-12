@@ -3,7 +3,9 @@ import numpy as np
 import math
 import fil_rouge_tools as frt
     
-def genetique_simule(clients, solution, num_generations, pop_size, num_parents_mating) :
+def genetique_simule(clients, best_solution, num_generations, pop_size, num_parents_mating) :
+    solution = np.copy(best_solution)
+
     '''This function uses a Genetic Algorithm to find the optimal solution 
     for the VRP (Vehicle Routing Problem) based on the clients, a random initial 
     solution (of arbitrary size), the number of generations, the number of parents
@@ -20,13 +22,15 @@ def genetique_simule(clients, solution, num_generations, pop_size, num_parents_m
     new_pop = new_pop.astype('int32')
     fitness = np.empty(pop_size)
     
+    fits = []
+
     for generation in range(num_generations):
         # first we calculate the fitness of each solution
         for i in range(pop_size):
             fitness[i] = frt.simulate(clients, new_pop[i])
-        print('\033[1m'+"Gen ", generation, " :" + '\033[0m')
+        #print('\033[1m'+"Gen ", generation, " :" + '\033[0m')
         best_fit = min(fitness)
-        print("Best result: ", best_fit)
+        #print("Best result: ", best_fit)
         
         # select the best parents in the population for mating
         parents = mating_pool(new_pop, fitness, num_parents_mating)
@@ -40,13 +44,21 @@ def genetique_simule(clients, solution, num_generations, pop_size, num_parents_m
         # create new population with the parents and the offspring
         new_pop[0 : parents.shape[0], :] = parents
         new_pop[parents.shape[0] :, :] = offspring
+
+        multiple = 100
+
+        if( (generation % multiple) == 0):
+            #print("I: [%3d]*10k , T : [%8.4f], best : [%5.2f], prob : [%5.2f]" % (i/multiple, T, best, probability) )
+            fits.append(best_fit)
+            #frt.view_solution(clients, best_solution, title=("iteration num. [%.2E]" % i ), save = 0, continous = 1 ) 
+        
         
     for i in range(pop_size):
         fitness[i] = frt.simulate(clients, new_pop[i])
         
     
     solution = new_pop[np.where(fitness == np.min(fitness))[0][0], :]
-    return solution 
+    return solution, fits
     
 # This function chooses the best parents that will be used for generating the
 #   new population, based on the fitness of each individual and the number

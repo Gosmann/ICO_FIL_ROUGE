@@ -5,6 +5,7 @@ from mesa.time import BaseScheduler
 from datetime import datetime
 from mesa.time import RandomActivation
 from mesa.datacollection import DataCollector
+import time 
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -14,6 +15,7 @@ import recuit as rc
 import fil_rouge_tools as frt
 
 #def recuit_simule(clients, best_solution, best):
+
 
 clients = frt.get_clients()
 clients = clients[0:100]    
@@ -59,6 +61,10 @@ class Opti_test(Model):
     
 model = Opti_test()
 model.step()
-et = time.time()
 
-model.step()
+steps=10
+et = time.time()
+for i in range (steps):
+    model.step()    
+    et = time.time() - et
+    print(et)

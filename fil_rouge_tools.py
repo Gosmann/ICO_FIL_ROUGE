@@ -47,7 +47,7 @@ def add_zeros(clients, sequence):
     # custom parameters
     max_weigth = 5000  # each truck can carry up to this kg
     max_volume = 20    # each truck can carry up to this cubic meters
-    speed = 50         # 50 km/h
+    speed = 80         # 50 km/h
     earths_circunference = 40075 # in km
 
     # depot coordinates
@@ -231,7 +231,7 @@ def view_solution(clients, sequence, continous = 1, title="std_title", save = 0)
     
 def improvement_curve(fit_list, title):
     plt.plot(fit_list, '.-')
-    plt.xlabel('Iteration (times 10k)')
+    plt.xlabel('Iteration (times 100)')
     plt.ylabel('Cost function f(x)')
     plt.title(title)
     plt.show()

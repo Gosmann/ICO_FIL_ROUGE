@@ -30,17 +30,17 @@ class Optimisation(Model):
         self.agent_list = []
         
 
-        self.ga_agent0 = ga.GA(clients, solution, 100, 2)
-        self.ga_agent1 = ga.GA(clients, solution, 100, 2)
-        self.ga_agent2 = ga.GA(clients, solution, 100, 2)
+        self.ga_agent0 = ga.GA(clients, solution, 1000, 20)
+        #self.ga_agent1 = ga.GA(clients, solution, 1000, 20)
+        #self.ga_agent2 = ga.GA(clients, solution, 1000, 20)
         
         self.schedule.add(self.ga_agent0)
-        self.schedule.add(self.ga_agent1)
-        self.schedule.add(self.ga_agent2)
+        #self.schedule.add(self.ga_agent1)
+        #self.schedule.add(self.ga_agent2)
         
         self.agent_list.append(self.ga_agent0)
-        self.agent_list.append(self.ga_agent1)
-        self.agent_list.append(self.ga_agent2)
+        #self.agent_list.append(self.ga_agent1)
+        #self.agent_list.append(self.ga_agent2)
 
     #la fonction principale
     def step(self):
@@ -58,10 +58,11 @@ st = time.time()
 model.step()
 et = time.time()
 
-model.step()
-
 frt.improvement_curve(model.ga_agent0.best_fit_list, "Genetic Algorithm")
 time = et-st
+
+while(1):
+    pass
 
 # genetic algorithm test
 #ga_sol, ga_fit, nb = ga.genetic_algorithm(clients, solution, 100, 2)

@@ -38,7 +38,7 @@ def convert(sol):
     suite=[]
     for e in sol:
         suite+=e
-    return suite
+    return suitemodel
 
 def check(clients,sol,véhicule):
     charge=0
