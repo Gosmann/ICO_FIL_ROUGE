@@ -6,7 +6,7 @@ import random as rd
 import copy
 from time import time
 
-def get_data(): #Créé la Base de donnée des client
+def get_data(): #Créé la Base de données des clients
     
     data = np.genfromtxt('dataset_edit.csv', delimiter=',')
     clients = np.delete(data, [0,2,7,-1], 1) 
@@ -37,7 +37,7 @@ def swapL(L,i): #échange un élément d'une liste avec un autre élément au ha
     L[i]=L[j]
     L[j]=c
 
-def init(clients): #Initialise une solution (ne fonctionne qu'avec des véhicules ayant tous les même caractéristique)
+def init(clients): #Initialise une solution (ne fonctionne qu'avec des véhicules ayant tous les mêmes caractéristiques)
     #charge_max = 7271.
     #volume_max = 15.5
     charge_max = 1700.
@@ -57,7 +57,7 @@ def init(clients): #Initialise une solution (ne fonctionne qu'avec des véhicule
 
     while i<n:
 
-        trajet = distance(clients[chemin[-1]],Liste[i])*60./speed #calculte d utemps de trajet en min
+        trajet = distance(clients[chemin[-1]],Liste[i])*60./speed #calculte du temps de trajet en min
 
         if charge_actuelle + Liste[i][5]<charge_max and volume_actuelle + Liste[i][6]<volume_max and temps + trajet > Liste[i][3] and temps + trajet < Liste[i][4]:
             chemin.append(int(Liste[i][0]))
@@ -65,10 +65,10 @@ def init(clients): #Initialise une solution (ne fonctionne qu'avec des véhicule
             volume_actuelle += Liste[i][6]
             temps += trajet + Liste[i][-1]
             i+=1
-            continue #Si toutes les contraintes sont vérifier on ajoute le clients à la suite
+            continue #Si toutes les contraintes sont vérifiées, on ajoute le client à la suite
           
         if temps+trajet>961. or temps+trajet>Liste[i][4]: #Si le temps est trop élevé cela signifie que
-            vehicule.append(chemin)                        #le véhicule a travailler toute la journée
+            vehicule.append(chemin)                        #le véhicule a travaillé toute la journée
             solutions.append(vehicule)                     #donc on l'ajoute à notre liste solution puis
             vehicule = []                               #on recommence l'échelle de temps à 0 avec un autre camion
             chemin = [0]
@@ -81,6 +81,7 @@ def init(clients): #Initialise une solution (ne fonctionne qu'avec des véhicule
             swapL(Liste,i)                              #pas les contraintes de temps donc on l'échange avec un client
             continue                                    #qui n'a pas encore été placé et on cherchera à le placer plus tard
 #cette fonction peut créer des erreurs si le dernier client à être placé ne respecte pas les contraintes de temps
+
         if charge_actuelle + Liste[i][5]>charge_max or volume_actuelle + Liste[i][6]>volume_max:
             temps += distance(clients[chemin[-1]],clients[0])*60./speed
             vehicule.append(chemin)
@@ -95,7 +96,7 @@ def init(clients): #Initialise une solution (ne fonctionne qu'avec des véhicule
     return solutions     
             
 
-def convert(sol): #convertis une suite de chemin en une seule liste où les retour au dépo^t sont les 0
+def convert(sol): #convertis une suite de chemin en une seule liste où les retour au dépôt sont les 0
     suite=[]
     for e in sol:
         suite+=e
@@ -124,7 +125,7 @@ def check(clients,sol): #vérifie qu'une matrice solution vérifie les contraint
             
     return True
 
-def simul(clients, solution, omega = 100): #fonction objective adapter à mes matrices
+def simul(clients, solution, omega = 100): #fonction objective adaptée à mes matrices
     sum_of_distances = 0
     number_of_vehicles = len(solution)
     moy=0
@@ -142,26 +143,26 @@ def simul(clients, solution, omega = 100): #fonction objective adapter à mes ma
 #omega = 400 semble significatif
 
 def tabou(clients, solution):
-    solution0 = solution #variable qui représente le noeud depuis lequel on va chercher une meilleur solution
+    solution0 = solution #variable qui représente le noeud depuis lequel on va chercher une meilleure solution
     cost=simul(clients, solution0) #le meilleur coût qu'on a trouvé pour l'instant
-    last=[[solution0,cost,[(0,0,0),(0,0,0)]]]#liste des dernier chemin emprunté par la descente de gradient
-    best = last[0] #meilleur solution actuelle
+    last=[[solution0,cost,[(0,0,0),(0,0,0)]]]#liste des derniers chemins empruntés par la descente de gradient
+    best = last[0] #meilleure solution actuelle
     tabouList=[] #liste des déplacements tabou
-    compt=0 #compteur pour arreter la boucle
+    compt=0 #compteur pour arrêter la boucle
     #bestCost=[cost]
-    loin = last[0] #pire solution trouver (permet de réinitialiser l'algorithme lorsqu'on est coincé dans un minimum local)
+    loin = last[0] #pire solution trouvée (permet de réinitialiser l'algorithme lorsqu'on est coincé dans un minimum local)
     
-    while len(tabouList)<1000 and compt<100: #l'algorithme tourn pour une certaine longueur de liste tabou ou d'itérations
+    while len(tabouList)<1000 and compt<100: #l'algorithme tourne pour une certaine longueur de liste tabou ou d'itérations
 
-        v = rd.randint(0,len(solution0)-1) #variables représentant la poqition du client dont on va
+        v = rd.randint(0,len(solution0)-1) #variables représentant la position du client dont on va
         c = rd.randint(0,len(solution0[v])-1) #essayer plusieurs swap pour trouver celui qui réduit le
-        i = rd.randint(1,len(solution0[v][c])-1) #plus le cout de la solution
+        i = rd.randint(1,len(solution0[v][c])-1) #plus le coût de la solution
 
-        proche = [] #solution qui réduit le plus le cout des swaps de (v,c,i)
-        p = simul(clients, solution0) #cout de proche
+        proche = [] #solution qui réduit le plus le coût des swaps de (v,c,i)
+        p = simul(clients, solution0) #coût de proche
         
         for Veh in range(len(solution0)):                #on va intervertir (v,c,i) avec toutes les positions
-            for Cli in range(len(solution0[Veh])):      #possible des les Index des Chemins des Vehicules
+            for Cli in range(len(solution0[Veh])):      #possibles des les Index des Chemins des Vehicules
                 for Ind in range(len(solution0[Veh][Cli])):
                     
                     sol = copy.deepcopy(solution0) #on test un swap
@@ -169,21 +170,21 @@ def tabou(clients, solution):
                     sol[Veh][Cli][Ind] = sol[v][c][i]
                     sol[v][c][i] = pivot
                     
-                    if check(clients,sol): #si le swap vérifie les condition on regarde plus en profondeur
+                    if check(clients,sol): #si le swap vérifie les conditions, on regarde plus en profondeur
                         
-                        cout = simul(clients,sol) #cout du swap
-                        deplacement = [(v,c,i),(Veh,Cli,Ind)] #déplacement q'uon a fait
+                        cout = simul(clients,sol) #coût du swap
+                        deplacement = [(v,c,i),(Veh,Cli,Ind)] #déplacement qu'on a fait
                         
                         if deplacement not in tabouList: #si le déplacement n'est pas dans tabou on regarde
                             
-                            if cout<p: #si son cout est plus faible alors on le sauvegarde dans proche
+                            if cout<p: #si son coût est plus faible alors on le sauvegarde dans proche
                                 p=cout
                                 proche=[sol,cout,deplacement]
-                            if cout>loin[1]: #si son cout est très élevé on le sauvegarde aussi
+                            if cout>loin[1]: #si son coût est très élevé on le sauvegarde aussi
                                 loin=[sol,cout,deplacement]
                     
                     
-            sol = copy.deepcopy(solution0) #ici on test de retiré (v,c,i) d'un chemin et de l'ajouter
+            sol = copy.deepcopy(solution0) #ici on test de retirer (v,c,i) d'un chemin et de l'ajouter
             pivot = sol[v][c].pop(i)        #à un autre chemin
             sol[Veh][Cli].append(pivot)
             
@@ -192,10 +193,10 @@ def tabou(clients, solution):
                 sol[v].pop(c)
                 vide = True
                 
-            if check(clients,sol): #de mêm on regarde si c'est un déplacement valide
+            if check(clients,sol): #de même on regarde si c'est un déplacement valide
                 cout = simul(clients,sol)
                 if vide:
-                    deplacement = [(v,c,i),(Veh,Cli-1,len(sol[Veh][Cli-1])-1)] #selon si on a supprimer un chemin 
+                    deplacement = [(v,c,i),(Veh,Cli-1,len(sol[Veh][Cli-1])-1)] #selon si on a supprimé un chemin 
                     if deplacement not in tabouList:                        #vide on fait gaffe aux indices
                         if cout<p:
                             p = cout
@@ -252,12 +253,12 @@ def tabou(clients, solution):
             else: #sinon on va se placer sur le maximum pour redescendre les gradients
                 last.append(loin)
                 tabouList=[]    
-        else: #si proch n'est pas vide on essaie de descendre le gradient
+        else: #si proche n'est pas vide on essaie de descendre le gradient
             if last!=[] and proche[1]<last[-1][1]:
                 if proche[1]<cost: #Si on atteint un minimum plus petit que le dernier record on 
-                    cost=proche[1]  #le sauvegarde ainsi que la solution associé
+                    cost=proche[1]  #le sauvegarde ainsi que la solution associée
                     best = proche
-                solution0=proche[0] #sinon on descent juste le gradient
+                solution0=proche[0] #sinon on descend juste le gradient
                 last.append(proche)
             else:
                 if len(last)>0: #Si on arrive pas à descendre le gradient on revient en arrière etc
