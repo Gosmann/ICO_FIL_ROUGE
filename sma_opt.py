@@ -24,7 +24,9 @@ import Tabou_V2 as tb
 import fil_rouge_tools as frt
 
 clients = frt.get_clients()
-clients = clients[0:65]    
+clients = clients[0:65]   
+clients1 = tb.get_data()
+clients1 = clients1[0:65] 
 
 # starts it with a random solution
 solution = np.arange(clients.shape[0])  
@@ -140,7 +142,7 @@ class AgentTabou(Agent):
         #self.unique_id = AgentTabou.unique_id
         self.unique_id = id
         
-        self.clients = clients 
+        self.clients = clients1 
         self.solution = solution
         self.best = 1e12
         self.best_fit_list = None
@@ -178,13 +180,14 @@ class Opti_test(Model):
         self.fits = []
         
         self.clients = clients 
+        self.clients1 = client1
         self.solution = solution
         self.best = 1e12
         
         self.recuit_agent = AgentRecuit(clients, solution, 1)
         #self.recuit_agent2 = AgentRecuit(clients, solution, 2)
         self.genetique_agent = AgentGenetique(clients, solution, 3, 1e3, 10, 2)
-        self.tabou_agent = AgentTabou(clients,solution)
+        self.tabou_agent = AgentTabou(clients1,solution, 4)
         
         self.schedule.add(self.recuit_agent)
         self.agent_list.append(self.recuit_agent)
