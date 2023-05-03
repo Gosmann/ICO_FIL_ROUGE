@@ -160,7 +160,7 @@ class AgentTabou(Agent):
         self.fits = self.fits + fits
         print(self.fits)
 
-        best = frt.simulate(self.clients, best_solution)
+        best = tb.simul(self.clients, best_solution)
         
         print("step tabou [%2d] [%s] [%8.2f / %8.2f]" % (self.itt, str(self.solution), best, self.best))
 
