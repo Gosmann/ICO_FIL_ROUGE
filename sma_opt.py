@@ -24,9 +24,7 @@ import Tabou_V2 as tb
 import fil_rouge_tools as frt
 
 clients = frt.get_clients()
-clients = clients[0:65]   
-clients1 = tb.get_data()
-clients1 = clients1[0:65] 
+clients = clients[0:65]    
 
 # starts it with a random solution
 solution = np.arange(clients.shape[0])  
@@ -133,44 +131,7 @@ class AgentRecuit(Agent):
             self.best = best
         
         #return best_solution
-        
-class AgentTabou(Agent):
-        
-    unique_id = 0
-    def __init__(self, clients, solution, id):
-        AgentTabou.unique_id +=1
-        #self.unique_id = AgentTabou.unique_id
-        self.unique_id = id
-        
-        self.clients = clients1 
-        self.solution = solution
-        self.best = 1e12
-        self.best_fit_list = None
-        self.itt = 0
-        
-        self.fits = []
-        
-    def step(self):
-        self.fits = []
-        self.itt += 1
-        
-        self.best = model.best
-        self.solution = model.solution
-    
-        best_solution, fits = tb.tabou(self.clients, self.solution)
-
-        self.fits = self.fits + fits
-        print(self.fits)
-
-        best = tb.simul(self.clients, best_solution)
-        
-        print("step tabou [%2d] [%s] [%8.2f / %8.2f]" % (self.itt, str(self.solution), best, self.best))
-
-        if( self.best > best ):
-            self.solution = best_solution
-            self.best = best
-        
-        #return best_solution
+      
         
 class Opti_test(Model):
     def __init__(self):
@@ -179,8 +140,7 @@ class Opti_test(Model):
         self.solutions_list = []
         self.fits = []
         
-        self.clients = clients 
-        self.clients1 = client1
+        self.clients = clients
         self.solution = solution
         self.best = 1e12
         
@@ -198,8 +158,6 @@ class Opti_test(Model):
         self.schedule.add(self.genetique_agent)
         self.agent_list.append(self.genetique_agent)
         
-        self.schedule.add(self.tabou_agent)
-        self.agent_list.append(self.tabou_agent)
 
     def step(self):
         #print("agent count: [%d]" % (self.schedule.get_agent_count()) )
