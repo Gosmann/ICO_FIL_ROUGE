@@ -20,6 +20,7 @@ np.set_printoptions(edgeitems=100,linewidth=250)
 
 
 import recuit as rc
+import Tabou_V2 as tb
 import fil_rouge_tools as frt
 
 clients = frt.get_clients()
@@ -131,6 +132,44 @@ class AgentRecuit(Agent):
         
         #return best_solution
         
+class AgentTabou(Agent):
+        
+    unique_id = 0
+    def __init__(self, clients, solution, id):
+        AgentTabou.unique_id +=1
+        #self.unique_id = AgentTabou.unique_id
+        self.unique_id = id
+        
+        self.clients = clients 
+        self.solution = solution
+        self.best = 1e12
+        self.best_fit_list = None
+        self.itt = 0
+        
+        self.fits = []
+        
+    def step(self):
+        self.fits = []
+        self.itt += 1
+        
+        self.best = model.best
+        self.solution = model.solution
+    
+        best_solution, fits = tb.tabou(self.clients, self.solution)
+
+        self.fits = self.fits + fits
+        print(self.fits)
+
+        best = frt.simulate(self.clients, best_solution)
+        
+        print("step tabou [%2d] [%s] [%8.2f / %8.2f]" % (self.itt, str(self.solution), best, self.best))
+
+        if( self.best > best ):
+            self.solution = best_solution
+            self.best = best
+        
+        #return best_solution
+        
 class Opti_test(Model):
     def __init__(self):
         self.schedule = BaseScheduler(self)
@@ -145,6 +184,7 @@ class Opti_test(Model):
         self.recuit_agent = AgentRecuit(clients, solution, 1)
         #self.recuit_agent2 = AgentRecuit(clients, solution, 2)
         self.genetique_agent = AgentGenetique(clients, solution, 3, 1e3, 10, 2)
+        self.tabou_agent = AgentTabou(clients,solution)
         
         self.schedule.add(self.recuit_agent)
         self.agent_list.append(self.recuit_agent)
@@ -154,6 +194,9 @@ class Opti_test(Model):
 
         self.schedule.add(self.genetique_agent)
         self.agent_list.append(self.genetique_agent)
+        
+        self.schedule.add(self.tabou_agent)
+        self.agent_list.append(self.tabou_agent)
 
     def step(self):
         #print("agent count: [%d]" % (self.schedule.get_agent_count()) )
